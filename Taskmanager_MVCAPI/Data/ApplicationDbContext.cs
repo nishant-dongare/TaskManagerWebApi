@@ -27,9 +27,8 @@ namespace Taskmanager_MVCAPI.Data
             modelBuilder.Entity<Batch>().HasMany(b => b.Students).WithOne(s => s.Batch).HasForeignKey(s => s.BatchId);
             modelBuilder.Entity<NewTask>().HasMany(t => t.TaskAssignments).WithOne(nt => nt.Task).HasForeignKey(s => s.TaskId);
             modelBuilder.Entity<TaskAssignment>().HasOne(ta => ta.Task).WithMany(t => t.TaskAssignments).HasForeignKey(ta => ta.TaskId);
-
             modelBuilder.Entity<TaskAssignment>().HasOne(ta => ta.Student).WithMany(s => s.TaskAssignments).HasForeignKey(ta => ta.StudentId);
+            modelBuilder.Entity<Student>().HasMany(s => s.TaskAssignments).WithOne(ta => ta.Student).HasForeignKey(ta => ta.StudentId);
         }
-
     }
 }

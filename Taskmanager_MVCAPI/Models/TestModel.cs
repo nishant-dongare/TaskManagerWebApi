@@ -48,6 +48,5 @@ namespace Taskmanager_MVCAPI.Models
         public NewTask? Task { get; set; }
         public int? StudentId { get; set; }
         public Student? Student { get; set; }
-
     }
 }

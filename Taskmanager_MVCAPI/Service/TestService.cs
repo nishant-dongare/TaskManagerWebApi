@@ -25,7 +25,7 @@ namespace Taskmanager_MVCAPI.Service
         public async Task<NewTask> GetByIdAsync(int id)
         {
             var newTask = await db.NewTasks.FindAsync(id); 
-            if (newTask == null)
+            if(newTask == null)
             {
                 throw new NotFoundException($"NewTask with id {id} not found");
             }
@@ -34,8 +34,7 @@ namespace Taskmanager_MVCAPI.Service
 
         public async Task<NewTask> GetByIdWithDetailsAsync(int taskId)
         {
-            return await db.NewTasks.Include(t => t.TaskAssignments).ThenInclude(ta => ta.Student)
-                .FirstOrDefaultAsync(t => t.TaskId == taskId);
+            return await db.NewTasks.Include(t => t.TaskAssignments).ThenInclude(ta => ta.Student).FirstOrDefaultAsync(t => t.TaskId == taskId);
         }
 
         public async Task<NewTask> AddAsync(NewTask newTask)

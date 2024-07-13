@@ -50,10 +50,5 @@ namespace Taskmanager_MVCAPI.Repo
                 return Convert.ToBase64String(hashBytes);
             }
         }
-
-
-
-
-
     }
 }

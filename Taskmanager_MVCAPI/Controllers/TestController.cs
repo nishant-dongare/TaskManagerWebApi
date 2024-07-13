@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Taskmanager_MVCAPI.Data;
 using Taskmanager_MVCAPI.Exceptions;
 using Taskmanager_MVCAPI.Models;
 using Taskmanager_MVCAPI.Repo;
@@ -376,5 +377,88 @@ namespace Taskmanager_MVCAPI.Controllers
                 return NotFound(ex.Message);
             }
         }
+    }
+
+    [Route("api/[controller]")]
+    [ApiController]
+    public class StudentsController : ControllerBase
+    {
+        private readonly ApplicationDbContext db;
+
+        public StudentsController(ApplicationDbContext context)
+        {
+            db = context;
+        }
+
+
+
+        // GET: api/Students/5
+        /*[HttpGet("{id}")]
+        public async Task<ActionResult<StudentDto>> GetStudent(int id)
+        {
+            var student = await db.Students.FirstOrDefaultAsync(s => s.StudentId == id);
+
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            // Load the related Batch entity
+            student.Batch = await db.Batches.FirstOrDefaultAsync(b => b.BatchId == student.BatchId);
+
+            // Load the related TaskAssignments
+            student.TaskAssignments = await db.TaskAssignments.Where(ta => ta.StudentId == student.StudentId)
+                                                    .ToListAsync();
+
+            return student;
+        }*/
+
+        // GET: api/Students/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<StudentDto>> GetStudent(int id)
+        {
+            var student = await db.Students.FirstOrDefaultAsync(s => s.StudentId == id);
+
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            var batch = await db.Batches.FirstOrDefaultAsync(b => b.BatchId == student.BatchId);
+            var taskAssignments = await db.TaskAssignments
+                                                .Where(ta => ta.StudentId == student.StudentId)
+                                                .ToListAsync();
+
+            var studentDto = new StudentDto
+            {
+                StudentId = student.StudentId,
+                StudentName = student.StudentName,
+                Batch = batch != null ? new Batch { BatchId = batch.BatchId, BatchName = batch.BatchName } : null,
+                TaskAssignmentsDto = taskAssignments.Select(ta => new TaskAssignmentDto
+                {
+                    TaskAssignmentId = ta.TaskAssignmentId,
+                    TaskId = ta.TaskId,
+                    StudentId = ta.StudentId
+                }).ToList()
+            };
+
+            return studentDto;
+        }
+
+
+
+        /*// GET: api/Students/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Student>> GetStudent(int id)
+        {
+            var student = await db.Students.Include(s => s.Batch).Include(s => s.TaskAssignments).FirstOrDefaultAsync(s => s.StudentId == id);
+
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            return student;
+        }*/
     }
 }

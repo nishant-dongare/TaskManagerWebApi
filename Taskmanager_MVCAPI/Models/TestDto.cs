@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Taskmanager_MVCAPI.Models
 {
@@ -37,5 +38,18 @@ namespace Taskmanager_MVCAPI.Models
 
         public List<Student>? Students { get; set; }
     }
+
+
+
+    public class StudentDto
+    {
+        public int StudentId { get; set; }
+        public string StudentName { get; set; }
+
+        public Batch? Batch { get; set; }
+
+        public List<TaskAssignmentDto>? TaskAssignmentsDto { get; set; }
+    }
+
 }
  
