@@ -1,0 +1,6 @@
+@Taskmanager_MVCAPI_HostAddress = http://localhost:5227
+
+GET {{Taskmanager_MVCAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
